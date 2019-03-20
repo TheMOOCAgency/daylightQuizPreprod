@@ -1,0 +1,36 @@
+﻿[
+{
+     "question_id":1,
+      "question_prequel":"Une chef de projet a reçu de l’aide de l’équipe et a besoin d’elle à nouveau pour créer un budget détaillé du projet. Dans quel groupe de processus est-elle ?",
+      "feedback":"Noter l’utilisation du mot « détaillé ». Un budget comme celui-ci est créé pendant la planification du projet.",
+      "possibilities":[
+         "Planification",
+         "Exécution",
+        "Initialisation",
+         "Avant le processus de management de projet"
+      ]
+   },
+{
+     "question_id":2,
+      "question_prequel":"La charte du projet est créée dans quel groupe de processus de management ?",
+      "feedback":"La charte de projet est nécessaire avant la planification et l’exécution du travail puissent commencer. Elle est donc créée et approuvée pendant l’initialisation du projet.",
+      "possibilities":[
+         "Planification",
+         "Clôture",
+        "Initialisation",
+         "Exécution"
+      ]
+   },
+{
+     "question_id":3,
+      "question_prequel":"L’équipe de projet vient tout juste de terminer l’échéancier et le budget initiaux du projet. Que faut-il faire ensuite ?",
+      "feedback":"Les exigences de communication et les standards de qualité sont nécessaires avant que les risques puissent être déterminés (particulièrement les risques liés à la communication et à la qualité). Les itérations ne peuvent pas commencer tant que les risques n’ont pas été identifiés, qualifiés et quantifiés et que les réponses aient été développées. À travers les itérations, le WBS et d'autres parties du plan de gestion de projet sont révisés. Un histogramme aurait été fait lors de la création de l’échéancier, donc cela ne peut être l’étape suivante. Parmi les choix listés, déterminer les exigences de communication est la meilleure option.",
+      "possibilities":[
+         "Créer un histogramme (Gantt)",
+         "Commencer les itérations",
+        "Déterminer les exigences de communications",
+         "Identifier les risques"
+      ]
+   }
+   
+   ]

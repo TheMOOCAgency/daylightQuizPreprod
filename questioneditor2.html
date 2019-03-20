@@ -1,0 +1,626 @@
+<!DOCTYPE html> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script> 
+
+
+<script src="js/jszip.min.js"></script>
+<script src="js/FileSaver.js"></script>
+
+<script type = "text/javascript"> 
+
+</script> 
+
+<script async>
+
+
+var BddURL = "https://preprod.daylight.themoocagency.com/"	  
+var indexURL = "https://preprod.daylight-back.themoocagency.com/daylightQuizEditor/"	  
+  
+var reset = function(){window.location.reload()}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+var master = getUrlVars()["master"];
+var prePost = getUrlVars()["type"];
+var reBack
+var prePostMaj=function(){
+
+
+if(prePost=="pre"){reBack="Pre"}
+else{reBack="Post"}
+return reBack
+
+}
+
+    var prePostMajCont=function(){
+	var Backso
+	
+	if(prePostMaj()=="Post"){Backso="Pre"}
+	else{Backso="Post"}
+	return Backso
+   
+   }
+
+<!-- var urlChange =   https://daylight-back.themoocagency.com/daylightQuizEditor/ -->
+var urlChange =   BddURL
+
+var AjaxUL = BddURL+"/quizMaster"+master
+
+
+var quizID="1a"
+// variable à Régler pour le nombre de questions 
+// variable à Régler pour le nombre de questions
+var quizReglageNumber 
+// variable à Régler pour le nombre de questions 
+// variable à Régler pour le nombre de questions 
+ 
+var quizQuestions = [];
+var listShuffle
+
+var correctAnswers = []
+var correctAnswersB = []
+
+var qArray = "";
+var bArray = "";
+var dopamine;
+var loadQuestion;
+var loadAnswers;
+var maxQuest=20;
+var maxQuestConfig
+
+// from configJson
+// from configJson
+// from configJson
+var chronoButton
+var pauseButton
+var setShuffle
+var showResultConfig
+var passScore
+var configArray
+var configArrayToSave
+
+
+
+// from configJson
+// from configJson
+// from configJson
+var answersArray = [3,3,3]
+ var masterQuestIMGURL = 'ressourses/img/';
+        var masterAnswerIMGURL = 'ressourses/img/';
+        var masterAnswerSongURL = 'ressourses/son/';
+        var masterQuestionSongURL = 'ressourses/son/';
+
+var dataObj 
+
+var qNameFile="questiondemo14.json"
+
+var template
+
+
+function deleteQ(position){
+if (window.confirm("Voulez vous supprimer la question?")) { 
+pushObje();
+arrayToJson.splice(position, 1);
+
+senOLO();
+
+}
+
+}
+
+function createtextAreaElement(elem,id){
+var alcNum=parseInt(id)+1
+$(elem).append("<div class='form-group' i="+id+1+" > <div class='col-sm-12 col-md-12 col-lg-12 top20'><h1>Question N°"+alcNum+"<button class='btn-primary' style='margin-left: 5px;font-size: 13px;padding: 5px;float:right;    background-color: #1886e4;background: #1886e4;' id="+id+" onclick='deleteQ(this.id)'>supprimer la question</button></h1><label for='title'>Intitulé:</label><textarea name='prequel' class='form-control' rows='4'>"+qArray[id].question_prequel+"</textarea><label for='rep1'>Réponse 1:</label><textarea class='form-control' rows='1' name='rep1'>"+qArray[id].possibilities[0]+"</textarea><label for='rep2'>Réponse 2:</label><textarea class='form-control' rows='1' name='rep2'>"+qArray[id].possibilities[1]+"</textarea><label for='rep3'>Réponse 3:</label><textarea class='form-control' rows='1' name='rep3'>"+qArray[id].possibilities[2]+"</textarea>	<label for='rep4'>Réponse 4:</label><textarea class='form-control' rows='1' name='rep4'>"+qArray[id].possibilities[3]+"</textarea><label for='sel1'>Bonne réponse:</label><select class='form-control selectAns' name='answer'><option value=1>"+qArray[id].possibilities[0]+"</option><option value=2>"+qArray[id].possibilities[1]+"</option><option value=3>"+qArray[id].possibilities[2]+"</option><option value=4>"+qArray[id].possibilities[3]+"</option></select><label for='feedBack'>feedback</label><textarea class='form-control' rows='4' name='feedBack'>"+qArray[id].feedback+"</textarea></div><div class='col-sm-12 col-md-12 col-lg-12 top20'>	<div class='col-sm-6 col-md-6 col-lg-6 textCenter'></div>	<div class='col-sm-6 col-md-6 col-lg-6 textCenter'></div></div></div>")
+
+<!-- partie anwers -->
+
+var korupt = $('.form-group')[id]
+$(korupt).find('select').find('option[value='+aArray[id]+']').prop('selected', true)
+}
+<!-- partie anwers -->
+var qObj
+
+var arrayToJson=[]
+var kal 
+var prequel = $(kal).find("textarea[name='prequel']")
+var feedBack = $(kal).find("textarea[name='feedBack']")
+var rep1 = $(kal).find("textarea[name='rep1']")
+var rep2 = $(kal).find("textarea[name='rep2']")
+var rep3 = $(kal).find("textarea[name='rep3']")
+var rep4 = $(kal).find("textarea[name='rep4']")
+
+function createObj(target,vnn){
+kal = $('.form-group')[vnn]
+prequel = $(kal).find("textarea[name='prequel']").val()
+feedBack = $(kal).find("textarea[name='feedBack']").val()
+rep1 = $(kal).find("textarea[name='rep1']").val()
+rep2 = $(kal).find("textarea[name='rep2']").val()
+rep3 = $(kal).find("textarea[name='rep3']").val()
+rep4 = $(kal).find("textarea[name='rep4']").val()
+
+qObj={
+
+     "question_id":vnn+1,
+
+      "question_prequel":prequel,
+
+      "feedback":feedBack,
+
+      "possibilities":[
+
+         rep1,
+
+         rep2,
+
+        rep3,
+
+         rep4
+
+      ]
+
+   }
+   target.push(qObj)
+}
+   
+function saveAll(){
+   
+   saveData(arrayToJson, "config.json");
+   }
+var target=$("#list")
+loadQuestion = function (){
+	 $.ajax({
+            url: AjaxUL,
+            type: 'GET',
+            dataType: 'html',
+            header: 'Content-Type: application/json',
+            cache: false,
+            processData: false,
+            success: function(data) {
+			
+                var myObject = JSON.stringify(data);
+				var cosy = data.replace(/\\\"/g,"");
+			
+                var x = JSON.parse(cosy);
+	
+				qArray = x["quizQuestionList"]
+				aArray = x["answersList"]
+				configArray = x["config"+prePostMaj()];
+				configArrayToSave = x["config"+prePostMajCont()];
+                for (var i = 0; i < qArray.length; i++) {
+                    quizQuestions.push(
+
+                        {
+                            type: "text",
+                            text: qArray[i].question_prequel,
+                            possibilities: [{
+                                    answer: qArray[i].possibilities[0],
+                                },
+                                {
+                                    answer: qArray[i].possibilities[1],
+                                },
+                                {
+                                    answer: qArray[i].possibilities[2],
+                                },
+                                {
+                                    answer: qArray[i].possibilities[3],
+                                }
+
+                            ],
+                            question_id: i + 1,
+                            question_id_true: qArray[i].question_id,
+                            selected: null,
+                            correct: null,
+                            feedBack: qArray[i].feedback,
+							questionImgUrl :masterQuestIMGURL+"q"+parseInt(parseInt([i])+1)+".png",
+							answerImgUrl :masterQuestIMGURL+"r"+parseInt(parseInt([i])+1)+".png",
+                            questionImgContain :qArray[i].questionImgContain,
+                        }
+                    );
+
+        target=$("#list")
+			
+				pushObje();
+
+
+                }
+
+first100();
+showButton();
+
+setTimeout(function(){$("#loader").hide(); }, 2000);
+
+            }
+
+
+
+        });
+
+	
+}
+
+
+function first100(){
+
+for (var i = 0; i < qArray.length; i++) {createtextAreaElement(target,i)}
+
+
+}
+
+function showButton(){
+$("#validate").show();
+}
+loadQuestion()
+
+var kal = {"quiz1a":[{"question_id":1,"question_prequel":"BBBBBBBBBBBBB’elle à nouveau pour créer un budget détaillé du projet. Dans quel groupe de processus est-elle ?","feedback":"Noter l’utilisation du mot « détaillé ». Un budget comme celui-ci est créé pendant la planification du projet.","possibilities":["Planification","Exécution","Initialisation","Avant le processus de management de projet"]},{"question_id":2,"question_prequel":"La charte du projet est créée dans quel groupe de processus de management ?","feedback":"La charte de projet est nécessaire avant la planification et l’exécution du travail puissent commencer. Elle est donc créée et approuvée pendant l’initialisation du projet.","possibilities":["Planification","Clôture","Initialisation","Exécution"]},{"question_id":3,"question_prequel":"L’équipe de projet vient tout juste de terminer l’échéancier et le budget initiaux du projet. Que faut-il faire ensuite ?","feedback":"Les exigences de communication et les standards de qualité sont nécessaires avant que les risques puissent être déterminés (particulièrement les risques liés à la communication et à la qualité). Les itérations ne peuvent pas commencer tant que les risques n’ont pas été identifiés, qualifiés et quantifiés et que les réponses aient été développées. À travers les itérations, le WBS et d'autres parties du plan de gestion de projet sont révisés. Un histogramme aurait été fait lors de la création de l’échéancier, donc cela ne peut être l’étape suivante. Parmi les choix listés, déterminer les exigences de communication est la meilleure option.","possibilities":["Créer un histogramme (Gantt)","Commencer les itérations","Déterminer les exigences de communications","Identifier les risques"]} ]}
+
+
+   
+function pushObje(){
+arrayToJson=[];
+answersArray = []
+for (var i = 0; i < qArray.length; i++) {
+
+createObj(arrayToJson,i)
+
+}
+
+var allaSelAns = $('.selectAns')
+
+for (var i = 0; i < allaSelAns.length; i++) {
+ouja = $('.selectAns')[i]
+var value = $(ouja).find(":selected").attr("value");
+answersArray.push(value)
+}
+
+}
+
+
+
+
+var senOLO = function(){
+var compse = "quizQuestionList"
+var compse2 = "answersList"
+var compse3 = "config"+prePostMaj()
+ var compse4 = "config"+prePostMajCont()
+kal[compse]=arrayToJson
+kal[compse2]=answersArray
+kal[compse3]=configArray
+kal[compse4]=configArrayToSave
+$.ajax({
+    url: AjaxUL,
+    dataType: 'json',
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify(kal),
+    processData: false,
+    success: function( data, textStatus, jQxhr ){
+        console.log(kal);window.location.reload();
+    },
+    error: function( jqXhr, textStatus, errorThrown ){
+        console.log( errorThrown );
+    }
+});
+}
+
+var senOLO2 = function(){
+var compse = "quizQuestionList"
+var compse2 = "answersList"
+var compse3 = "config"+prePostMaj()
+ var compse4 = "config"+prePostMajCont()
+kal[compse]=arrayToJson
+kal[compse2]=answersArray
+kal[compse3]=configArray
+kal[compse4]=configArrayToSave
+$.ajax({
+    url: AjaxUL,
+    dataType: 'json',
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify(kal),
+    processData: false,
+    success: function( data, textStatus, jQxhr ){
+        console.log(kal);
+    },
+    error: function( jqXhr, textStatus, errorThrown ){
+        console.log( errorThrown );
+    }
+});
+}
+
+
+
+
+function createNewObj(target1,target2){$
+var goodREp
+var indice
+kal = $('#contactForm')
+indice = $(kal).find("textarea[name='quesNumber']").val()
+indiceArr = indice-1
+prequel = $(kal).find("textarea[name='prequel']").val()
+feedBack = $(kal).find("textarea[name='feedBack']").val()
+rep1 = $(kal).find("textarea[name='rep1']").val()
+rep2 = $(kal).find("textarea[name='rep2']").val()
+rep3 = $(kal).find("textarea[name='rep3']").val()
+rep4 = $(kal).find("textarea[name='rep4']").val()
+goodREp = $(kal).find("textarea[name='goodRep']").val()
+
+qObj={
+
+     "question_id":indice,
+
+      "question_prequel":prequel,
+
+      "feedback":feedBack,
+
+      "possibilities":[
+
+         rep1,
+
+         rep2,
+
+        rep3,
+
+         rep4
+
+      ]
+
+   }
+   target1.splice(indiceArr, 0, qObj);
+   target2.splice(indiceArr, 0, goodREp);
+}
+   
+
+
+function createQuiz(){
+var folder ="/var/www/html/daylightQuizEditor/quizChapter/"+prePost+"/chap"+master;
+var zip = "/var/www/html/daylightQuizEditor/quizChapter/"+prePost+"/chap"+master+"/chap"+master+".zip"
+
+
+					var data = {};
+					data.folder = folder;
+					data.zip = zip;
+					
+					$.ajax({
+						type: 'POST',
+						data: JSON.stringify(data),
+				        contentType: 'application/json',
+                          url: 'http://51.75.207.43:3001/createZipQuiz',						
+                        success: function(res) {
+                            console.log(res);
+
+                        }
+                    });
+
+}
+
+
+
+
+
+</script>
+<html lang="en" ng-app="turtleFacts">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>QUIZ DAYLIGHT</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/countDown.css">
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+      <link rel="stylesheet" type="text/css" href="css/vicons-font.css" />
+      <link rel="stylesheet" type="text/css" href="css/base.css" />
+      <link rel="stylesheet" type="text/css" href="css/buttons.css" />
+      <link href="https://fonts.googleapis.com/css?family=Archivo" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+      <!--SCORM-->
+   </head>
+
+   </body style="text-align:center">
+   <style>
+   .top20{margin-top:20px;}
+   label{margin-top:20px;}
+   .bottom40{margin-bottom:100px;}
+   .textCenter{text-align:center}
+   h1{ margin: 0; }
+
+
+#contact:hover { background: #666; }
+#contact:active { background: #444; }
+
+#contactForm { 
+  display: none;
+
+border: 6px solid salmon;
+
+padding: 2em;
+
+width: 93%;
+
+text-align: center;
+
+background: #fff;
+
+position: absolute;
+
+top: 0%;
+  
+}
+
+input, textarea { 
+  margin: .8em auto;
+  font-family: inherit; 
+  text-transform: inherit; 
+  font-size: inherit;
+  
+  display: block; 
+  width: 280px; 
+  padding: .4em;
+}
+textarea { height: 80px; resize: none; }
+
+.formBtn { 
+  width: 140px;
+  display: inline-block;
+  
+  background: teal;
+  color: #fff;
+  font-weight: 100;
+  font-size: 1.2em;
+  border: none;
+  height: 30px;
+}
+
+.loaderImg {
+    vertical-align: middle;
+    position: absolute;
+    width: 11%;
+    top: 8%;
+    left: 44%;
+}
+   </style>
+   
+   <script>
+   $(function() {
+  
+  // contact form animations
+  $('#contact').click(function() {
+    $('#contactForm').fadeToggle();
+  })
+  $(document).mouseup(function (e) {
+    var container = $("#contactForm");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        container.fadeOut();
+    }
+  });
+  
+});
+
+var checkQuiz=function(){
+
+if (window.confirm("Vous allez être rediriger vers la prévisualisation du Quiz, merci de confirmer.")) { 
+window.location.href = indexURL +"quizChapter/"+prePost+"/chap"+master;
+}
+
+
+}
+
+var downLoadScorm=function(){
+
+if (window.confirm("Télécharger le package SCORM?")) { 
+window.location.href =  indexURL + "quizChapter/"+prePost+"/chap"+master+"/chap"+master+".zip";
+}
+
+
+}
+
+
+var seeRaw=function(){
+
+if (window.confirm("Vous allez être rediriger vers la prévisualisation des données, merci de confirmer.")) { 
+window.location.href = urlChange+ "/quizMaster"+master;
+}
+
+
+}
+
+var seeConfigPre=function(){
+
+if (window.confirm("Vous allez être rediriger vers la partie configuration du quiz.")) { 
+window.location.href = indexURL+"configEditor.html?type=pre&master="+master
+}
+
+
+}
+
+var seeConfigPost=function(){
+
+if (window.confirm("Vous allez être rediriger vers la partie configuration du quiz.")) { 
+window.location.href = indexURL+"configEditor.html?type=post&master="+master
+}
+
+
+} 
+
+ </script>
+ 
+ <div id ='loader' style='background-color:white;width:100%;height:2000px;position:absolute;z-index:9999'>
+<img class="loaderImg " src="css/img/image.gif">
+ </div>
+   
+   
+   <div id="main" style="width: 90%;margin:0 auto;">
+   	
+	   <div class="row bottom40" id="create" style="margin-top:100px"> 
+   
+
+<div class="btn-group btn-group-justified">
+<a id ="contact" class="btn btn-info">AJOUTER UNE QUESTION</a>
+<a onclick="checkQuiz()"class="btn btn-primary">VOIR LE QUIZ</a>
+<a onclick="downLoadScorm()" class="btn btn-info">PACKAGE SCORM</a>
+<a onclick="seeRaw()" class="btn btn-primary">VOIR LES DONNÉES</a>
+<a onclick="seeConfigPre()" class="btn btn-info">CONFIGURER LE QUIZ</a>
+</div>
+	
+	</div>
+	
+
+
+	<script>
+	function ValidateNewENtry(){
+	 pushObje();createNewObj(arrayToJson,answersArray);senOLO();}
+	 
+	 
+	</script>
+
+
+<div id="contactForm" style="z-index: 9999;">  	<h1>Ajouter une question</h1>  	<div class="col-sm-12 col-md-12 col-lg-12 top20"><label style="margin-top:5px" for="sel1">Numero de la Question</label style="margin-top:5px"><textarea class="form-control" rows="1" name="quesNumber"></textarea><label style="margin-top:5px" for="title">Intitulé:</label style="margin-top:5px"><textarea name="prequel" class="form-control" rows="4"></textarea><label style="margin-top:5px" for="rep1">Réponse 1:</label style="margin-top:5px"><textarea style="height:45px;" class="form-control" rows="1" name="rep1"></textarea><label style="margin-top:5px" for="rep2">Réponse 2:</label style="margin-top:5px"><textarea style="height:45px;" class="form-control" rows="1" name="rep2"></textarea><label style="margin-top:5px" for="rep3">Réponse 3:</label style="margin-top:5px"><textarea style="height:45px;" class="form-control" rows="1" name="rep3"></textarea>	<label style="margin-top:5px" for="rep4">Réponse 4:</label style="margin-top:5px"><textarea style="height:45px;" class="form-control" rows="1" name="rep4"></textarea><label style="margin-top:5px" for="rep4">numero de la bonne réponse :</label style="margin-top:5px"><textarea class="form-control" rows="1" name="goodRep"></textarea><label style="margin-top:5px" for="feedBack">feedback</label style="margin-top:5px"><textarea class="form-control" rows="4" name="feedBack"> 	</textarea> 	<button type="button" class="btn btn-success" style="margin-top:40px"onclick="ValidateNewENtry()">VALIDATE</button> 	</div> </div>
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+	<div class="row" id="list"> 
+
+	</div>
+	
+    <div class="row bottom40" id="validate" style="display:none;position: fixed;  bottom: 20px;  right: 20px;  background-color: gray;  padding: 30px;"> 
+   
+	<div class='col-sm-12 col-md-12 col-lg-12 top20'>	
+		<div class='col-sm-6 col-md-6 col-lg-6 textCenter'>
+<button type="button" class="btn btn-primary odaNone " style="" onclick="reset()">RESET</button>
+
+		</div>	
+		<div class='col-sm-6 col-md-6 col-lg-6 textCenter'>
+	<button type="button" class="btn btn-success odaNone"   onclick="pushObje(); senOLO()">VALIDATE</button>
+		</div>
+	</div>
+	
+	
+	</div>
+	   
+   <script>
+
+							
+				
+							
+   </script>
+     <script language="JavaScript" type="text/javascript" >
+
+    </script>  
+   </div>
+   <body>
+</html>

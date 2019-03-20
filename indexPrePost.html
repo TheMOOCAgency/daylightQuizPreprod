@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="icon" href="https://getbootstrap.com/docs/4.1/https://getbootstrap.com/docs/4.1/favicon.ico">
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> 
+      <title>QUIZ MAKER</title>
+      <!-- Bootstrap core CSS -->
+      <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+   </head>
+   <style>
+      p{font-weight: bolder;}
+      button{font-weight: bolder;
+      font-size: 58%;}
+      .card-text{min-height:58px}
+   </style>
+   <body>
+      <script>
+	  
+	  
+
+
+var BddURL = "https://preprod.daylight.themoocagency.com/quizMaster"	  
+var indexURL = "https://preprod.daylight-back.themoocagency.com/daylightQuizEditor"	  
+
+
+		 var urlSO = BddURL
+         var quizID
+         var quititle
+         var titleArray
+         var nbrQuiz
+         function openQuiz(id){
+         var thisid = id
+         var itemId = thisid.substring(4, thisid.length);
+         var url = indexURL+"/quizChapter2/pre/chap"
+         var urlCompose = url+itemId
+         window.open(urlCompose)
+         }
+         
+         function openQuizPost(id){
+         var thisid = id
+         var itemId = thisid.substring(4, thisid.length);
+         var url = indexURL+"/quizChapter2/post/chap"
+         var urlCompose = url+itemId
+         window.open(urlCompose)
+         }
+         
+         function editQuizPre(id){
+         var thisid = id
+         var itemId = thisid.substring(4, thisid.length);
+         var url = indexURL+"/questioneditor3.html?type=pre&master="
+         var urlCompose = url+itemId
+         window.open(urlCompose)
+         }
+		 function editQuizPre2(id){
+         var thisid = id
+         var itemId = thisid.substring(4, thisid.length);
+         var url = indexURL+"/questioneditor2.html?type=pre&master="
+         var urlCompose = url+itemId
+         window.open(urlCompose)
+         }
+          function editQuizPost(id){
+         var thisid = id
+         var itemId = thisid.substring(4, thisid.length);
+         var url = indexURL+"/questioneditor3.html?type=post&master="
+         var urlCompose = url+itemId
+         window.open(urlCompose)
+         }
+         
+         
+         function apendEl(target,elmt){
+         $(target).append(elmt)
+         
+         }
+          
+          var template = 
+          "<div class='col-md-4' id='thumbnailQ"+quizID+ "'><div class='card mb-4 shadow-sm'><img class='card-img-top' src='https://academie.daylight.fr/media/microsite/academie-daylight/auto/images/logo.png' alt='Card image cap'> <div class='card-body'> <p class='card-text'>"+quititle+"</p><div class='d-flex justify-content-between align-items-center'><div class='btn-group'> <button id='view"+quizID+"'type='button' class='btn btn-sm btn-outline-secondary' onclick='openQuiz()' style='font-weight: bolder'>View</button><button type='button' id='edit"+quizID+"' class='btn btn-sm btn-outline-secondary' onclick='editQuiz(this.id)' style='font-weight: bolder'>Edit</button> </div><small class='text-muted'>9 mins</small></div></div></div></div>"
+          
+var CreatorQuizID
+var CreatorQuizIDPlace   
+ var stopMLe="Fonction désactivée "         
+          loadQuestion = function (){
+         $.ajax({
+                   url: BddURL,
+                   type: 'GET',
+                   dataType: 'html',
+                   header: 'Content-Type: application/json',
+                   cache: false,
+                   processData: false,
+                   success: function(data) {
+                       var myObject = JSON.stringify(data);
+         		var cosy = data.replace(/\\\"/g,"");
+                       var x = JSON.parse(cosy); 
+         		titleArray= x.quizTitle
+         		nbrQuiz = x.quizPackage
+                       for (var i = 0; i < nbrQuiz; i++) {
+         		console.log(titleArray[i])
+         		quizID=i;
+         		var quizIDps1 = quizID+1
+         		var targetI=$("#mainROW")
+				CreatorQuizID=quizID+2
+				CreatorQuizIDPlace=quizID+1
+         		quititle = titleArray[i]
+         		template = 
+         		"<div class='col-md-4' id='thumbnailQ"+quizIDps1+"'><div class='card mb-4 shadow-sm'><img class='card-img-top' src='https://academie.daylight.fr/media/microsite/academie-daylight/auto/images/logo.png' style='width:80%;margin: 10px auto;'alt='Card image cap'> <div class='card-body'> <p class='card-text'>"+quititle+"</p><div class='d-flex justify-content-between align-items-center'><div class='btn-group'> <button id='view"+quizIDps1+"' type='button' class='btn btn-sm btn-outline-secondary' onclick='editQuizPre(this.id)' style='font-weight: bolder;font-size: 58%'>Préprésentiel</button><button type='button' id='edit"+quizIDps1+"' class='btn btn-sm btn-outline-warning' onclick='editQuizPost(this.id)' style='font-weight: bolder;font-size: 58%'>Postprésentiel</button> </div><small class='text-muted'></small></div></div></div></div>"
+				
+				template2 = 
+         		"<div class='col-md-4' id='thumbnailQ"+quizIDps1+"'><div class='card mb-4 shadow-sm'><img class='card-img-top' src='https://academie.daylight.fr/media/microsite/academie-daylight/auto/images/logo.png' style='width:80%;margin: 10px auto;'alt='Card image cap'> <div class='card-body'> <p class='card-text'>"+quititle+"</p><div class='d-flex justify-content-between align-items-center'><div class='btn-group'> <button id='view"+quizIDps1+"' type='button' class='btn btn-sm btn-outline-secondary' onclick='editQuizPre2(this.id)' style='font-weight: bolder;font-size: 58%'>Configurer le quiz</button> </div><small class='text-muted'></small></div></div></div></div>"
+         		 
+				 if (quizID<14){apendEl(targetI,template)}
+				 else{apendEl(targetI,template2)}
+         
+          
+         		
+         
+               }
+			   
+			    var targetI = $("#mainROW")
+				
+            var templateCreation =
+                "<div class='col-md-4' id='thumbnailQ" + "" + "'><div class='card mb-4 shadow-sm'><img class='card-img-top' src='https://academie.daylight.fr/media/microsite/academie-daylight/auto/images/logo.png' style='width:80%;margin: 10px auto;'alt='Card image cap'> <div class='card-body'> <p class='card-text'>" + "Créer un nouveau quiz" + "</p><div class='d-flex justify-content-between align-items-center'><div class='btn-group'> <button id='view" + "" + "' type='button' class='btn btn-sm btn-outline-secondary' onclick='createNewQuiz()' style='font-weight: bolder;font-size: 58%'>Créer un nouveau Quiz</button></div><small class='text-muted'></small></div></div></div></div>"
+            apendEl(targetI, templateCreation)
+               }
+         
+         
+         })
+         }
+         
+          loadQuestion() 
+
+
+
+          
+var emmptyObjh = ""
+
+
+<!-- function to create new instance -->
+<!-- function to create new instance -->
+<!-- function to create new instance -->
+<!-- function to create new instance -->
+ function updateBdTitle(titleArr){ 
+     $.ajax({
+       url: urlSO,
+       dataType: 'json',
+       type: 'post',
+       contentType: 'application/json',
+       data: JSON.stringify(titleArr),
+       processData: false,
+       success: function( data, textStatus, jQxhr ){
+           console.log(titleArr);
+		   window.location.reload();
+       },
+       error: function( jqXhr, textStatus, errorThrown ){
+           console.log( errorThrown );
+       }
+   });
+   
+}
+
+
+		
+		var loadTitile
+		var quizID
+		var CreatorQuizID
+		var CreatorQuizIDPlace
+         var quititle
+         var titleArray
+         var nbrQuiz
+	var title 
+	var tiret="-"
+	var number = CreatorQuizID
+	var titleTot=title+tiret+number
+	<!-- titleArray.push[title] -->
+   
+
+   
+   
+function  createNewQuiz(){
+
+ number = CreatorQuizID
+ if (number >29 ){alert("Attention, le nombre de quiz est limité à 30, pour plus d'informations, merci de contacter l'administrateur de la plateforme.")}
+ else{
+
+{
+               var retVal = prompt("Entrer le nom du Quiz: ", "titre içi");
+               title = retVal
+			   number = CreatorQuizID
+			   titleTot=number+tiret+title
+			   if (confirm("Creation du quiz : "+titleTot+". Voulez - vous continuer?" )) {
+					alert("Le Quiz "+ number+tiret+title+ " a bien été créé.")
+					titleArray.push(titleTot);
+					var hui = {
+  "quizPackage": number,
+  "quizTitle": titleArray
+}
+					updateBdTitle(hui)
+					
+					
+			   
+  
+} else {
+"Opération annulée"
+} 
+            }
+
+}   
+}   
+   
+
+        
+      </script>
+      <main role="main">
+         <section class="jumbotron text-center" style="backgroundcolor:#F39000">
+            <div class="container">
+               <h1 class="jumbotron-heading">QUIZ MAKER</h1>
+               </br>
+               <p class="lead text-muted">Cette interface vous permet d'éditer vos quiz en temps réel.</br> La page d'édition vous permet de télécharger directement le PACKAGE SCORM généré. </br>Vous pouvez visualiser les différentes modification en cliquant sur le bouton 'voir'.</p>
+            </div>
+         </section>
+         <section >
+            <div class="album py-5 bg-light">
+               <div class="container">
+                  <div class="row" id="mainROW">
+                  </div>
+               </div>
+            </div>
+         </section>
+         <section class="jumbotron text-center" style="backgroundcolor:#F39000">
+            <div class="container">
+               <h1 class="jumbotron-heading">Exemple de Quiz</h1>
+                </br>
+               <p class="lead text-muted">Voici un exemple de quiz les différents parametres possibles.</p>
+
+               <p class="lead text-muted"></p>
+            </div>
+            <section>
+               <div class="album py-5 bg-light">
+                  <div class="container">
+                     <div class="row" id="mainROW">
+                        <div class="col-md-4" id="thumbnailQ1">
+                           <div class="card mb-4 shadow-sm">
+                              <img class="card-img-top" src="https://academie.daylight.fr/media/microsite/academie-daylight/auto/images/logo.png" style="width:80%;margin: 10px auto;" alt="Card image cap"> 
+                              <div class="card-body">
+                                 <p class="card-text">1-Quiz Chronométré + images + aléatoire</p>
+                                 <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group"> <button id="view1" type="button" class="btn btn-sm btn-outline-secondary" onclick="window.open('http://51.75.207.43/daylightQuizEditor/quizChapter/baseAllIn/');" style="font-weight: bolder;font-size: 58%">Voir le Quiz</button> </div>
+                                    <small class="text-muted"></small>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+    
+          
+                      
+                     </div>
+                  </div>
+               </div>
+            </section>
+         </section>
+      </main>
+      <footer class="text-muted">
+         <div class="container">
+            <p>The MOOC Agency 2019</p>
+            <p>Plus d'informations ? <a href="https://themoocagency.com">Visiter notre site</a> </p>
+         </div>
+      </footer>
+      <!-- Bootstrap core JavaScript
+         ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+      <script src="https://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script>
+      <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
+   </body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script> 
+<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script> 
+<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="js/jquery.autogrowtextarea.js"></script>
+<script type = "text/javascript"> </script> 
+<script async>
+
+
+
+var BddURL = "https://preprod.daylight.themoocagency.com/quizMaster"	
+var indexURL = "https://preprod.daylight-back.themoocagency.com/daylightQuizEditor"	 
+
+   function getUrlVars() {
+       var vars = {};
+       var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+           vars[key] = value;
+       });
+       return vars;
+   }
+   
+
+   var master = getUrlVars()["master"];
+   var prePost = getUrlVars()["type"];
+   var reBack
+   var prePostMaj=function(){
+   
+   
+   if(prePost=="pre"){reBack="Pre"}
+   else{reBack="Post"}
+   return reBack
+   
+   }
+   
+    var prePostMajCont=function(){
+	var Backso
+	
+	if(prePostMaj()=="Post"){Backso="Pre"}
+	else{Backso="Post"}
+	return Backso
+   
+   }
+
+   var AjaxUL = BddURL+master
+   
+   
+   var configArray
+   var configArrayToSave
+   
+   
+   
+   var quiz_time
+   var quiz_title
+   var quiz_title2
+   var quiz_id
+   var quiz_n_questions 
+   var quiz_n_questionsMax 	
+   var answers_file_name
+   var question_file_name
+   var setShuffle
+   var chronoButton
+   var pauseButton
+   var SubLines
+   var quiz_passScore
+   var showResultConfig
+   
+   
+   
+   loadConfig = function (){
+   	 $.ajax({
+               url: AjaxUL,
+               type: 'GET',
+               dataType: 'html',
+               header: 'Content-Type: application/json',
+               cache: false,
+               processData: false,
+               success: function(data) {
+                   var myObject = JSON.stringify(data);
+   				var cosy = data.replace(/\\\"/g,"");
+                   var x = JSON.parse(cosy);     
+   				qArray = x["quizQuestionList"]
+   				aArray = x["answersList"]
+   				configArray = x["config"+prePostMaj()];
+   				configArrayToSave = x["config"+prePostMajCont()];
+                   var myObject = JSON.stringify(data);
+                   var x = JSON.parse(data);
+   					quiz_time = configArray.quiz_time
+								quiz_passScore = configArray.passScore
+								quiz_title = configArray.quiz_title
+								quiz_title2  = configArray.quiz_title2
+								quiz_id = configArray.quiz_id
+								quiz_n_questions = configArray.quiz_n_questions
+								quiz_n_questionsMax = configArray.quiz_n_questionsMax	
+								answers_file_name = configArray.answers_file_name
+								question_file_name = configArray.question_file_name
+								setShuffle =configArray. setShuffle
+								chronoButton = configArray.chronoButton
+								pauseButton = configArray.pauseButton
+								SubLines = configArray.SubLines
+								showResultConfig = configArray.showResultConfig
+								
+   setMyform()
+               }
+   
+   
+   
+           });
+   
+   	
+   }
+   
+   loadConfig()
+   
+   
+   
+   
+      
+   function pushObje(){
+   arrayToJson=[];
+   answersArray = []
+   for (var i = 0; i < qArray.length; i++) {
+   
+   createObj(arrayToJson,i)
+   
+   }
+   
+   var allaSelAns = $('.selectAns')
+   
+   for (var i = 0; i < allaSelAns.length; i++) {
+   ouja = $('.selectAns')[i]
+   var value = $(ouja).find(":selected").attr("value");
+   answersArray.push(value)
+   }
+   
+   }
+   
+	function welcome(){
+	 window.location.href = indexURL
+	}
+   
+   
+   var senOLO2 = function(){
+   var compse = "quizQuestionList"
+   var compse2 = "answersList"
+   var compse3 = "config"+prePostMaj()
+   var compse4 = "config"+prePostMajCont()
+   kal = {[compse]:qArray,[compse2]:aArray,[compse3]:obhj,[compse4]:configArrayToSave,}
+   $.ajax({
+       url: AjaxUL,
+       dataType: 'json',
+       type: 'post',
+       contentType: 'application/json',
+       data: JSON.stringify(kal),
+       processData: false,
+       success: function( data, textStatus, jQxhr ){
+           console.log(kal);
+		   welcome();
+       },
+       error: function( jqXhr, textStatus, errorThrown ){
+           console.log( errorThrown );
+       }
+   });
+   }
+								
+								function setMyform(){
+								
+								quiz_time = configArray.quiz_time
+								quiz_passScore = configArray.passScore
+								quiz_title = configArray.quiz_title
+								quiz_title2  = configArray.quiz_title2
+								quiz_id = configArray.quiz_id
+								quiz_n_questions = configArray.quiz_n_questions
+								quiz_n_questionsMax = configArray.quiz_n_questionsMax	
+								answers_file_name = configArray.answers_file_name
+								question_file_name = configArray.question_file_name
+								setShuffle =configArray. setShuffle
+								chronoButton = configArray.chronoButton
+								pauseButton = configArray.pauseButton
+								SubLines = configArray.SubLines
+								showResultConfig = configArray.showResultConfig
+   
+										
+								intro=[""]
+								$("#intro1")[0].value=SubLines[0]
+								$("#intro2")[0].value=SubLines[1]
+								$("#intro3")[0].value=SubLines[2]
+								document.querySelector('input[name="quizTitle"]').value=quiz_title;
+								document.querySelector('input[name="quizSubTitle"]').value=quiz_title2;
+								document.querySelector('input[name="quizMaxQuestion"]').value=quiz_n_questionsMax;
+								document.querySelector('input[name="quizNQuestion"]').value=quiz_n_questions;
+								document.querySelector("input[name='passScore']").value=quiz_passScore
+								document.querySelector("input[name='time']").value=quiz_time
+							
+								if(setShuffle==true || setShuffle=="true"){
+								document.querySelector("input[name='setShuffle'][value=false]").checked=false;
+								document.querySelector("input[name='setShuffle'][value=true]").checked=true;
+								}
+								else{document.querySelector("input[name='setShuffle'][value=false]").checked=true;
+								document.querySelector("input[name='setShuffle'][value=true]").checked=false;}
+								
+								
+								if(showResultConfig==true || showResultConfig=="true"){
+								document.querySelector("input[name='showResultConfig'][value=false]").checked=true;
+								document.querySelector("input[name='showResultConfig'][value=true]").checked=false;
+								}
+								else{document.querySelector("input[name='showResultConfig'][value=false]").checked=false;
+								document.querySelector("input[name='showResultConfig'][value=true]").checked=true;}
+								
+								if(chronoButton==true || chronoButton=="true"){
+								document.querySelector("input[name='chronoButton'][value=false]").checked=false;
+								document.querySelector("input[name='chronoButton'][value=true]").checked=true;
+								}
+								else{document.querySelector("input[name='chronoButton'][value=false]").checked=true;
+								document.querySelector("input[name='chronoButton'][value=true]").checked=false;}
+								
+								if(pauseButton==true || pauseButton=="true"){
+								document.querySelector("input[name='pauseButton'][value=false]").checked=false;
+								document.querySelector("input[name='pauseButton'][value=true]").checked=true;
+								}
+								else{document.querySelector("input[name='pauseButton'][value=false]").checked=true;
+								document.querySelector("input[name='pauseButton'][value=true]").checked=false;}
+								
+								    $(".timeLeft").hide();
+					$('input[type=radio][name=chronoButton]').change(function() {
+            	if (this.value == true || this.value == 'true') {
+            		$(".timeLeft").show();
+            	}
+            	else if (this.value == false || this.value == 'false') {
+            		$(".timeLeft").hide();
+            	}
+            });
+            		
+								
+								
+   }
+   
+  function validate(){
+					
+								intro=[""]
+								intro[0]=$("#intro1")[0].value
+								intro[1]=$("#intro2")[0].value;
+								intro[2]=$("#intro3")[0].value;
+								quizNQuestion=	document.querySelector('input[name="quizNQuestion"]').value
+								quizMaxQuestion=document.querySelector('input[name="quizMaxQuestion"]').value							
+								subTitle=document.querySelector('input[name="quizSubTitle"]').value;
+								showResultConfig=document.querySelector("input[name='showResultConfig']:checked").value;
+								passScore=document.querySelector("input[name='passScore']").value;
+								time=document.querySelector("input[name='time']").value;
+								
+								function checkp(){
+								var checkPH
+								if (document.querySelector("input[name='pauseButton']:checked"))
+									{checkPH = document.querySelector("input[name='pauseButton']:checked").value;}
+								else
+								{checkPH=false}
+								return checkPH
+								}
+								
+								function chronoP(){
+								var chronoPH
+								if (document.querySelector("input[name='chronoButton']:checked"))
+									{chronoPH = document.querySelector("input[name='chronoButton']:checked").value;}
+								else
+								{chronoPH=false}
+								return chronoPH
+								}
+								
+								pauseButton=checkp()
+								chronoButton=chronoP()
+								
+								
+								setShuffle=document.querySelector("input[name='setShuffle']:checked").value;
+								quizTitle=document.querySelector("input[name='quizTitle']").value;
+								answerFile="answersdemo14"
+								questionFile="questiondemo14"
+								
+								
+								
+								var arrayB
+								var arrayC
+								function changeToBoolean(arg){
+								 arrayB=arg
+								for(i=0;i<arrayB.length;i++)
+								if((window[arrayB[i]]=="false") || (window[arrayB[i]]==false)){window[arrayB[i]]=false}
+								if((window[arrayB[i]]=="true") || (window[arrayB[i]]==true)){window[arrayB[i]]=true}
+								console.log(window[i])
+								
+								}
+								
+								function changeToNumber(arg){
+								 arrayC=arg
+								for(i=0;i<arrayC.length;i++)
+								{window[arrayC[i]]=parseInt(window[arrayC[i]])}
+								
+								}
+								
+								changeToBoolean(["chronoButton","pauseButton","setShuffle","showResultConfig"])		
+								changeToNumber(["passScore","quizMaxQuestion","quizNQuestion","time"])
+								
+								obhj={ 'quiz_title':quizTitle,'quiz_title2':subTitle,'quiz_id':quiz_id,'chronoButton':chronoButton,      'pauseButton':pauseButton, 'setShuffle':setShuffle,'showResultConfig':showResultConfig,'passScore':passScore,'quiz_n_questions':quizNQuestion,'quiz_n_questionsMax':quizMaxQuestion,'answers_file_name':answerFile,'question_file_name':questionFile,'quiz_time':time,'SubLines':intro}
+						
+								
+								if (window.confirm("Votre fichier de configuration va être généré. Merci de confirmer")) { 
+								senOLO2();
+								}
+							
+						
+							
+							}
+							
+							
+							
+							 
+     
+</script>
+<html lang="en" ng-app="turtleFacts">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>QUIZ DAYLIGHT</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/countDown.css">
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+      <link rel="stylesheet" type="text/css" href="css/vicons-font.css" />
+      <link rel="stylesheet" type="text/css" href="css/base.css" />
+      <link rel="stylesheet" type="text/css" href="css/buttons.css" />
+      <link rel="stylesheet" type="text/css" href="css/form.css" />
+      <link href="https://fonts.googleapis.com/css?family=Archivo" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+      <!--SCORM-->
+   </head>
+   </body style="text-align:center">
+   <style>
+      .top20{margin-top:20px;}
+      label{margin-top:20px;}
+      .bottom40{margin-bottom:100px;}
+      .textCenter{text-align:center}
+      h1{ margin: 0; }
+      #contact:hover { background: #666; }
+      #contact:active { background: #444; }
+      #contactForm { 
+      display: none;
+      border: 6px solid salmon;
+      padding: 2em;
+      width: 93%;
+      text-align: center;
+      background: #fff;
+      position: absolute;
+      top: 0%;
+      }
+      input, textarea { 
+      margin: .8em auto;
+      font-family: inherit; 
+      text-transform: inherit; 
+      font-size: inherit;
+      display: block; 
+      width: 280px; 
+      padding: .4em;
+      }
+      textarea { height: 80px; resize: none; }
+      .formBtn { 
+      width: 140px;
+      display: inline-block;
+      background: teal;
+      color: #fff;
+      font-weight: 100;
+      font-size: 1.2em;
+      border: none;
+      height: 30px;
+      }
+	  .timeLeft{display:none}
+	  .form .form-label {
+    border-top: 1px solid #fff;
+    display: block;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 42px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 0 #FFF;
+    width: 35%;
+    white-space: nowrap;
+}
+   </style>
+   <script>
+      $(function() {
+      
+      // contact form animations
+      $('#contact').click(function() {
+       $('#contactForm').fadeToggle();
+      })
+      $(document).mouseup(function (e) {
+       var container = $("#contactForm");
+      
+       if (!container.is(e.target) // if the target of the click isn't the container...
+           && container.has(e.target).length === 0) // ... nor a descendant of the container
+       {
+           container.fadeOut();
+       }
+      });
+      
+      });
+      
+      var checkQuiz=function(){
+      
+      if (window.confirm("Vous allez être rediriger vers la prévisualisation du Quiz, merci de confirmer.")) { 
+      window.location.href = indexURL+"/quizChapter/"+prePost+"/chap"+master;
+      }
+      
+      
+      }
+      
+      var downLoadScorm=function(){
+      
+      if (window.confirm("Télécharger le package SCORM?")) { 
+      window.location.href = indexURL+"/quizChapter/"+prePost+"/chap"+master+"/chap"+master+".zip";
+      }
+      
+      
+      }
+      
+      
+      var seeRaw=function(){
+      
+      if (window.confirm("Vous allez être rediriger vers la prévisualisation des données, merci de confirmer.")) { 
+      window.location.href =BddURL+master;
+      }
+      
+      
+      }
+   </script>
+   <div id="main" style="width: 90%;margin:0 auto;">
+      <div class="row bottom40" id="create" style="margin-top:100px">
+    
+      </div>
+      <script>
+         function ValidateNewENtry(){
+          pushObje();createNewObj(arrayToJson,answersArray);senOLO();}
+          
+          
+      </script>
+   
+      <div class='col-sm-12 col-md-12 col-lg-12 top20'>	
+			<form class="form has-validation"  id="formOl">
+   <div class="clearfix">
+      <label for="form-date" class="form-label" id="date"></label>
+   </div>
+   <div class="clearfix">
+      <label for="form-name" class="form-label">Titre du Quiz<em>*</em></label>
+      <div class="form-input">
+         <input type="text" id="quizTitle" name="quizTitle" required="required" placeholder="Titre du Quiz" />
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-name" class="form-label">Sous-titres<em>*</em></label>
+      <div class="form-input">
+         <input type="text" id="quizSubTitle" name="quizSubTitle" required="required" placeholder="Sous-titre" />
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-name" class="form-label">Texte d'introduction</label>
+      <div class="form-input">
+         <input type="text" id="intro1" name="name"  placeholder="ligne 1" maxlength="200"/>
+         <input type="text" id="intro2" name="name"  placeholder="ligne 2" maxlength="200"/>
+         <input type="text" id="intro3" name="name"  placeholder="ligne 3" maxlength="200"/>
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-nbrQuest" class="form-label">Nombre de questions à afficher <em>*</em></label>
+      <div class="form-input">
+         <input type="number" maxlength="12" min="1" max="300" id="quizNQuestion" name="quizNQuestion" required="required"  placeholder="nombre de questions à afficher dans le quiz" />
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-nbrQuest" class="form-label">Nombre total de questions du quiz <em>*</em></label>
+      <div class="form-input">
+         <input type="number" maxlength="12" min="1" max="300" id="quizMaxQuestion" name="quizMaxQuestion" required="required"  placeholder="nombre de questions que contient la base" />
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-nbrQuest" class="form-label">Seuil de succès en %<em>*</em></label>
+      <div class="form-input">
+         <input type="number" maxlength="12" min="1" max="300" id="passScore" name="passScore" required="required"  placeholder="entrez un pourcentage de réussite" />
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-gender" class="form-label">Affichage aléatoire des questions</label>
+      <div class="form-input">
+         <div class="radiogroup"><label>
+            <input type="radio" name="setShuffle"  value=true id = "setShuffleTrue"/> Oui</label> <label>
+            <input type="radio" name="setShuffle" value=false  id = "setShuffleFalse"/> Non</label>
+         </div>
+      </div>
+   </div>
+   <div class="clearfix">
+      <label for="form-gender" class="form-label">Temps limite
+      </label>
+      <div class="form-input">
+         <div class="radiogroup">
+            <label>
+            <input type="radio" name="chronoButton" value=true /> Oui
+            </label> 
+            <label>
+            <input type="radio" name="chronoButton" value=false /> Non
+            </label>
+         </div>
+         <script>
+        		
+         </script>
+         <div class="form-input timeLeft">
+            <label for="form-nbrQuest" class="form-label">Bouton Pause </label>
+            <div class="form-input">
+               <div class="radiogroup">
+                  <label>
+                  <input type="radio" name="pauseButton" value=true /> Oui
+                  </label> 
+                  <label>
+                  <input type="radio" name="pauseButton" value=false /> Non
+                  </label>
+               </div>
+            </div>
+            <label for="form-nbrQuest" class="form-label">Temps limite <em>*</em></label>
+            <div class="form-input">
+               <input type="number" maxlength="12" min="1" max="300" id="form-succes" name="time"  placeholder="secondes" />
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="clearfix">
+      <label for="form-gender" class="form-label">Masquer les réponses pour l’apprenant </label>
+      <div class="form-input">
+         <div class="radiogroup"><label>
+            <input type="radio" name="showResultConfig"  value=true /> Oui</label> <label>
+            <input type="radio" name="showResultConfig" value=false /> Non</label>
+         </div>
+      </div>
+   </div>
+
+   </div>  
+   <div class=" clearfix" style="margin-left: 37%;  padding: 0.6em;">
+ 
+   </div>
+</form>
+
+      </div>
+	  
+	  <div style="color: #fff !important;margin:auto; margin-bottom: 200px;background-color: #2196F3 !important; background: #2196F3 !important;color: #fff !important;  background-color: #2196F3 !important;  background: red;      background-color: red;  font-size: 16px;  padding: 16px;height: auto;width: 20%;text-align: center;    border-radius: 15px;cursor:pointer" onclick="validate()" data-kwdiaostructure="&quot;0&quot;:&quot;input&quot;,&quot;1&quot;:&quot;submit@@@@@@@KwDiaoTagDIV&quot;,&quot;2&quot;:&quot;Enregistrer&quot;" data-kwdiaohashid="input@submit@@@@@@@KwDiaoTagDIV@Enregistrer">Enregistrer</div>
+      </div>
+   
+   </div>
+   <body>
+</html>

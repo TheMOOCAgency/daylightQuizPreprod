@@ -1,0 +1,18 @@
+﻿{ "quiz_title":"Demo Quiz global",
+     "quiz_title2":"200 questions",
+     "quiz_id":1,
+     "chronoButton":true,
+     "pauseButton":true,
+	 "setShuffle":true,
+	 "showResultConfig":true,
+	 "passScore":50,
+     "quiz_n_questions":3,
+     "quiz_n_questionsMax":3,
+     "answers_file_name":"answersdemo14",
+     "question_file_name":"questiondemo14",
+     "quiz_time":10,
+      "SubLines":[
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at pretium nisi. Suspendisse vehicula libero sem. Maecenas ultrices libero ac mi vulputate sagittis. Cras non sapien dapibus, mattis orci at, scelerisque urna. Aenean laoreet nulla urna, at sodales metus efficitur ac. Proin consectetur posuere ipsum, a pulvinar arcu tincidunt nec. Etiam vel velit ullamcorper, feugiat eros eu, dignissim ex. Praesent lobortis sed massa a fermentum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed malesuada pellentesque augue. Integer sit amet metus venenatis, mollis felis eu, posuere tortor."
+   ]
+   }
+ 
